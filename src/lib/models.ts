@@ -92,13 +92,22 @@ export type SellerDashboardData = {
 };
 
 export type ShippingQuoteRequest = {
-  originZip: string;
-  destinationZip: string;
-  weightMt: number;
+  origin?: string;
+  originZip?: string;
+  destinationZip?: string;
+  totalMt?: number;
+  weightMt?: number;
 };
 
 export type ShippingQuoteResponse = {
-  zone: string;
-  estimatedUsd: number;
-  transitDays: number;
+  ok?: boolean;
+  message?: string;
+  zone?: string;
+  transitDays?: number;
+  estimatedUsd?: number;
+  usd_per_mt?: number;
+  total_usd?: number;
+  origin?: string;
+  destinationZip?: string;
+  totalMt?: number;
 };

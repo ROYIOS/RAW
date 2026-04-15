@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { expirePendingOrders, getOrderById } from "@/src/lib/orders";
@@ -38,7 +38,7 @@ function formatDeliveryCountdown(dateIso: string | null | undefined) {
   return `${days} días ${hours} hrs`;
 }
 
-export default function ClientOrderPage() {
+function ClientOrderContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
 
@@ -340,5 +340,30 @@ export default function ClientOrderPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+function OrderPageFallback() {
+  return (
+    <main className="page-shell">
+      <section className="site-container py-16">
+        <div className="rounded-[32px] border border-neutral-200 bg-white p-10 text-center">
+          <h1 className="text-2xl font-semibold text-neutral-950">
+            Cargando orden...
+          </h1>
+          <p className="mt-3 text-neutral-600">
+            Espera un momento mientras cargamos la información.
+          </p>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+export default function ClientOrderPage() {
+  return (
+    <Suspense fallback={<OrderPageFallback />}>
+      <ClientOrderContent />
+    </Suspense>
   );
 }

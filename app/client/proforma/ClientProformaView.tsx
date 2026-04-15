@@ -1,13 +1,13 @@
 "use client";
 
-import { Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { getOrderById } from "@/src/lib/orders";
 
-function ClientProformaContent() {
-  const searchParams = useSearchParams();
-  const orderId = searchParams.get("orderId");
+export default function ClientProformaView({
+  orderId,
+}: {
+  orderId: string;
+}) {
   const order = orderId ? getOrderById(orderId) : null;
 
   const handlePrint = () => {
@@ -236,30 +236,5 @@ Gracias.`
         </div>
       </div>
     </main>
-  );
-}
-
-function ProformaPageFallback() {
-  return (
-    <main className="page-shell">
-      <div className="site-container py-16">
-        <div className="rounded-[24px] border border-neutral-200 bg-white p-10 text-center">
-          <h1 className="text-2xl font-semibold text-neutral-950">
-            Cargando proforma...
-          </h1>
-          <p className="mt-3 text-neutral-600">
-            Espera un momento mientras cargamos la información.
-          </p>
-        </div>
-      </div>
-    </main>
-  );
-}
-
-export default function ClientProformaPage() {
-  return (
-    <Suspense fallback={<ProformaPageFallback />}>
-      <ClientProformaContent />
-    </Suspense>
   );
 }
