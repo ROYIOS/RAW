@@ -7,6 +7,14 @@ import { getOrders } from "@/src/lib/orders";
 import type { Order } from "@/src/lib/models";
 
 type DemoRole = "buyer" | "seller" | "admin";
+type DemoSessionLike =
+  | DemoRole
+  | {
+      role?: DemoRole;
+      company?: string;
+      email?: string;
+    }
+  | null;
 
 type SellerStat = {
   name: string;
@@ -15,6 +23,12 @@ type SellerStat = {
   avgResponseHours: number;
   acceptanceRate: number;
 };
+
+function getRoleFromSession(session: DemoSessionLike): DemoRole | null {
+  if (!session) return null;
+  if (typeof session === "string") return session;
+  return session.role ?? null;
+}
 
 function getResolvedOrders(orders: Order[]) {
   return orders.filter(
@@ -205,9 +219,10 @@ function formatDays(value: number) {
 
 export default function AdminDashboardPage() {
   const session = useMemo(
-    () => getDemoSession() as DemoRole | null,
+    () => getDemoSession() as DemoSessionLike,
     []
   );
+  const currentRole = getRoleFromSession(session);
 
   const allOrders = useMemo(() => getOrders(), []);
   const soldOrders = useMemo(() => getSoldOrders(allOrders), [allOrders]);
@@ -257,7 +272,7 @@ export default function AdminDashboardPage() {
     window.location.href = "/login";
   };
 
-  if (session !== "admin") {
+  if (currentRole !== "admin") {
     return (
       <main className="page-shell">
         <section className="site-container py-16">

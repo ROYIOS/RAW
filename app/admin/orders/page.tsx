@@ -7,6 +7,20 @@ import { getOrders, updateOrderStatus } from "@/src/lib/orders";
 import type { Order } from "@/src/lib/models";
 
 type DemoRole = "buyer" | "seller" | "admin";
+type DemoSessionLike =
+  | DemoRole
+  | {
+      role?: DemoRole;
+      company?: string;
+      email?: string;
+    }
+  | null;
+
+function getRoleFromSession(session: DemoSessionLike): DemoRole | null {
+  if (!session) return null;
+  if (typeof session === "string") return session;
+  return session.role ?? null;
+}
 
 function getStatusLabel(status: Order["status"]) {
   switch (status) {
@@ -44,9 +58,11 @@ function getStatusClass(status: Order["status"]) {
 
 export default function AdminOrdersPage() {
   const session = useMemo(
-    () => getDemoSession() as DemoRole | null,
+    () => getDemoSession() as DemoSessionLike,
     []
   );
+  const currentRole = getRoleFromSession(session);
+
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
@@ -72,7 +88,7 @@ export default function AdminOrdersPage() {
     refreshOrders();
   };
 
-  if (session !== "admin") {
+  if (currentRole !== "admin") {
     return (
       <main className="page-shell">
         <section className="site-container py-16">
