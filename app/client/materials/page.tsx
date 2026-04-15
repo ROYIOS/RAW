@@ -76,7 +76,7 @@ export default function ClientMaterialsPage() {
             <div>
               <p className="text-base font-semibold tracking-tight">RAW</p>
               <p className="text-sm text-neutral-500">
-                Marketplace · precio por MT
+                Marketplace · 
               </p>
             </div>
           </Link>
@@ -107,12 +107,12 @@ export default function ClientMaterialsPage() {
               Inventario disponible
             </div>
 
-            <h1 className="text-4xl font-semibold tracking-tight text-neutral-750 md:text-5xl">
-             CON RAW ES MAS FACIL QUE NUNCA
-              <span className="block text-neutral-400">
-                COMPRA DE FORMA RAPIDA Y SEGURA
-              </span>
-            </h1>
+           <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
+  CON RAW NUNCA FUE TAN FÁCIL
+  <span className="block text-neutral-400">
+    compra de forma rápida y segura
+  </span>
+</h1>
 
             <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-600 md:text-lg">
               Busca por grado, espsor, el material que necesitas y agrégalo al carrito para generar tu orden.

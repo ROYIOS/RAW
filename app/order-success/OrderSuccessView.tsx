@@ -19,7 +19,7 @@ export default function OrderSuccessView({
             <div>
               <p className="text-base font-semibold tracking-tight">RAW</p>
               <p className="text-sm text-neutral-500">
-                Marketplace · precio por MT
+                Marketplace 
               </p>
             </div>
           </Link>
