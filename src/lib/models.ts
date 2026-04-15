@@ -42,7 +42,6 @@ export type Order = {
   freight: number;
   total: number;
   notes?: string;
-
   confirmed_at?: string | null;
   estimated_delivery_date?: string | null;
   document_type?: OrderDocumentType;
@@ -90,4 +89,16 @@ export type SellerDashboardData = {
   weekly_sales: SellerWeeklySalesPoint[];
   status_breakdown: SellerStatusBreakdownPoint[];
   top_remaining_inventory: SellerInventoryRow[];
+};
+
+export type ShippingQuoteRequest = {
+  originZip: string;
+  destinationZip: string;
+  weightMt: number;
+};
+
+export type ShippingQuoteResponse = {
+  zone: string;
+  estimatedUsd: number;
+  transitDays: number;
 };
