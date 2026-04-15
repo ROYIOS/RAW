@@ -2,11 +2,13 @@ import type {
   SellerDashboardData,
   SellerGoal,
   SellerStatusBreakdownPoint,
+  SellerTopSoldProduct,
   SellerWeeklySalesPoint,
 } from "@/src/lib/models";
 import { getOrders } from "@/src/lib/orders";
 import {
   getInventoryWithRemaining,
+  getSellerInventory,
   getSellerInventoryStats,
 } from "@/src/lib/sellerInventory";
 
@@ -120,11 +122,75 @@ export function getStatusBreakdown(): SellerStatusBreakdownPoint[] {
   ];
 }
 
+function getSalesUsd() {
+  const orders = getOrders().filter(
+    (order) => order.status === "confirmed" || order.status === "admin_override"
+  );
+
+  return orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+}
+
+function getAverageDaysOnPlatform() {
+  const inventory = getSellerInventory();
+
+  if (inventory.length === 0) return 0;
+
+  const now = new Date().getTime();
+
+  const totalDays = inventory.reduce((sum, item) => {
+    const publishedAt = item.published_at
+      ? new Date(item.published_at).getTime()
+      : now;
+
+    const diffMs = Math.max(now - publishedAt, 0);
+    const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+    return sum + diffDays;
+  }, 0);
+
+  return totalDays / inventory.length;
+}
+
+function getTopSoldProducts(): SellerTopSoldProduct[] {
+  const orders = getOrders().filter(
+    (order) => order.status === "confirmed" || order.status === "admin_override"
+  );
+
+  const productMap = new Map<
+    string,
+    { label: string; sold_mt: number; sales_usd: number }
+  >();
+
+  for (const order of orders) {
+    for (const item of order.items) {
+      const label = `${item.grade} · ${item.thickness_mm}mm`;
+      const current = productMap.get(label) ?? {
+        label,
+        sold_mt: 0,
+        sales_usd: 0,
+      };
+
+      current.sold_mt += Number(item.quantity || 0);
+      current.sales_usd +=
+        Number(item.quantity || 0) * Number(item.price_per_mt || 0);
+
+      productMap.set(label, current);
+    }
+  }
+
+  return Array.from(productMap.values())
+    .sort((a, b) => b.sold_mt - a.sold_mt)
+    .slice(0, 3);
+}
+
 export function getSellerDashboardData(): SellerDashboardData {
   const stats = getSellerInventoryStats();
   const goal = getSellerMonthlyGoal();
   const weekly_sales = getWeeklySalesForCurrentMonth();
   const status_breakdown = getStatusBreakdown();
+  const sales_usd = getSalesUsd();
+  const avg_days_on_platform = getAverageDaysOnPlatform();
+  const top_sold_products = getTopSoldProducts();
 
   const goal_progress_pct =
     goal.target_mt > 0
@@ -142,5 +208,8 @@ export function getSellerDashboardData(): SellerDashboardData {
     weekly_sales,
     status_breakdown,
     top_remaining_inventory,
+    sales_usd,
+    avg_days_on_platform,
+    top_sold_products,
   };
 }

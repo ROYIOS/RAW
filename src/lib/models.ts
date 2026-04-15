@@ -12,6 +12,7 @@ export type Listing = {
   available_mt: number;
   location: string;
   inventory_status: InventoryStatus;
+  published_at?: string;
 };
 
 export type CartItem = Listing & {
@@ -82,6 +83,12 @@ export type SellerStatusBreakdownPoint = {
   value: number;
 };
 
+export type SellerTopSoldProduct = {
+  label: string;
+  sold_mt: number;
+  sales_usd: number;
+};
+
 export type SellerDashboardData = {
   stats: SellerInventoryStats;
   goal: SellerGoal;
@@ -89,6 +96,9 @@ export type SellerDashboardData = {
   weekly_sales: SellerWeeklySalesPoint[];
   status_breakdown: SellerStatusBreakdownPoint[];
   top_remaining_inventory: SellerInventoryRow[];
+  sales_usd: number;
+  avg_days_on_platform: number;
+  top_sold_products: SellerTopSoldProduct[];
 };
 
 export type ShippingQuoteRequest = {

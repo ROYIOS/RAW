@@ -42,6 +42,7 @@ function mapRowToListing(
     available_mt: Number(row.available_mt ?? 0),
     location: String(row.location ?? ""),
     inventory_status: "active",
+    published_at: new Date().toISOString(),
   };
 }
 
@@ -526,42 +527,87 @@ export default function UploadPage() {
             ) : null}
           </div>
 
-          <div className="glass-card p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
-              Formato esperado
-            </h2>
+          <div className="space-y-6">
+            <div className="glass-card p-8">
+              <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+                Indicadores comerciales
+              </h2>
 
-            <div className="mt-6 rounded-[24px] bg-neutral-50 p-5">
-              <p className="text-sm font-medium text-neutral-950">
-                Encabezados requeridos
-              </p>
-              <div className="mt-4 space-y-2 text-sm text-neutral-600">
-                {REQUIRED_HEADERS.map((header) => (
-                  <p key={header}>
-                    <span className="font-semibold text-neutral-950">
-                      {header}
-                    </span>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-[24px] bg-neutral-50 p-5">
+                  <p className="text-sm text-neutral-500">Ventas en USD</p>
+                  <p className="mt-2 text-2xl font-semibold tracking-tight text-neutral-950">
+                    ${dashboard.sales_usd.toLocaleString()}
                   </p>
-                ))}
+                </div>
+
+                <div className="rounded-[24px] bg-neutral-50 p-5">
+                  <p className="text-sm text-neutral-500">
+                    Promedio de días en plataforma
+                  </p>
+                  <p className="mt-2 text-2xl font-semibold tracking-tight text-neutral-950">
+                    {dashboard.avg_days_on_platform.toFixed(1)} días
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="mt-5 rounded-[24px] bg-neutral-50 p-5">
-              <p className="text-sm font-medium text-neutral-950">
-                Plantilla RAW
-              </p>
-              <p className="mt-2 text-sm text-neutral-600">
-                El botón de descarga genera una plantilla real en CSV para
-                iniciar la carga.
-              </p>
+            <div className="glass-card p-8">
+              <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+                Top productos vendidos
+              </h2>
+
+              {dashboard.top_sold_products.length === 0 ? (
+                <div className="mt-6 rounded-[24px] bg-neutral-50 p-5 text-sm text-neutral-600">
+                  Aún no hay ventas confirmadas para mostrar ranking.
+                </div>
+              ) : (
+                <div className="mt-6 space-y-4">
+                  {dashboard.top_sold_products.map((product, index) => (
+                    <div
+                      key={`${product.label}-${index}`}
+                      className="rounded-[24px] bg-neutral-50 p-5"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="text-sm font-semibold text-neutral-950">
+                            {product.label}
+                          </p>
+                          <p className="mt-1 text-sm text-neutral-500">
+                            {product.sold_mt.toFixed(1)} MT vendidas
+                          </p>
+                        </div>
+
+                        <div className="text-right">
+                          <p className="text-xs text-neutral-500">Ventas</p>
+                          <p className="mt-1 text-sm font-semibold text-sky-700">
+                            ${product.sales_usd.toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <Link
-              href="/seller/orders"
-              className="mt-6 inline-flex w-full items-center justify-center rounded-2xl border border-sky-200 bg-white px-5 py-3 text-sm font-semibold text-sky-700 transition hover:bg-sky-50"
-            >
-              Ir a órdenes pendientes
-            </Link>
+            <div className="glass-card p-8">
+              <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+                Acción rápida
+              </h2>
+
+              <p className="mt-3 text-sm leading-6 text-neutral-600">
+                Revisa pendientes, acepta órdenes y mantén visible solo el
+                inventario que realmente deseas mover esta semana.
+              </p>
+
+              <Link
+                href="/seller/orders"
+                className="mt-6 inline-flex w-full items-center justify-center rounded-2xl border border-sky-200 bg-white px-5 py-3 text-sm font-semibold text-sky-700 transition hover:bg-sky-50"
+              >
+                Ir a órdenes pendientes
+              </Link>
+            </div>
           </div>
         </div>
 

@@ -108,7 +108,7 @@ export default function ClientMaterialsPage() {
             </div>
 
            <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
-  CON RAW NUNCA FUE TAN FÁCIL
+  Con Raw nunca fue tan facil
   <span className="block text-neutral-400">
     compra de forma rápida y segura
   </span>
