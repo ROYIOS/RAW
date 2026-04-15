@@ -284,7 +284,7 @@ export default function UploadPage() {
           <div className="max-w-3xl">
             <div className="mb-5 section-pill">
               <span className="h-2 w-2 rounded-full bg-sky-500" />
-              Vendedor · dashboard ejecutivo
+              Vendedor · dashboard
             </div>
 
             <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">

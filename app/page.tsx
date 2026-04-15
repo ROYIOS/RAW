@@ -67,12 +67,11 @@ export default function LoginPage() {
             </div>
 
             <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
-              Entra como comprador, vendedor o admin.
+             Bienvenido a RAW, tu portal para las urgencias
             </h1>
 
             <p className="mt-5 text-base leading-7 text-neutral-600">
-              Este acceso demo permite probar la plataforma por rol sin backend
-              real. La sesión se guarda localmente para navegar el flujo.
+              Vende o compra materiales de forma rápida, segura y transparente. RAW es una plataforma diseñada para mostrar cómo la tecnología puede transformar la industria del acero, facilitando conexiones directas entre compradores y vendedores, optimizando procesos y brindando visibilidad total en cada transacción.
             </p>
           </div>
 
