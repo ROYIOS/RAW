@@ -6,6 +6,8 @@ import { clearDemoSession, getDemoSession } from "@/src/lib/demoAuth";
 import { getOrders } from "@/src/lib/orders";
 import type { Order } from "@/src/lib/models";
 
+type DemoRole = "buyer" | "seller" | "admin";
+
 type SellerStat = {
   name: string;
   mt: number;
@@ -202,7 +204,11 @@ function formatDays(value: number) {
 }
 
 export default function AdminDashboardPage() {
-  const session = useMemo(() => getDemoSession(), []);
+  const session = useMemo(
+    () => getDemoSession() as DemoRole | null,
+    []
+  );
+
   const allOrders = useMemo(() => getOrders(), []);
   const soldOrders = useMemo(() => getSoldOrders(allOrders), [allOrders]);
   const resolvedOrders = useMemo(() => getResolvedOrders(allOrders), [allOrders]);
@@ -251,7 +257,7 @@ export default function AdminDashboardPage() {
     window.location.href = "/login";
   };
 
-  if (session?.role !== "admin") {
+  if (session !== "admin") {
     return (
       <main className="page-shell">
         <section className="site-container py-16">
@@ -282,19 +288,16 @@ export default function AdminDashboardPage() {
             <div className="logo-badge">RAW</div>
             <div>
               <p className="text-base font-semibold tracking-tight">RAW</p>
-              <p className="text-sm text-neutral-500">Portal admin</p>
+              <p className="text-sm text-neutral-500">Panel admin</p>
             </div>
           </Link>
 
           <nav className="hidden items-center gap-6 md:flex">
             <Link href="/admin" className="nav-link-active">
-              Dashboard
+              Dashboard admin
             </Link>
             <Link href="/admin/orders" className="nav-link">
               Órdenes
-            </Link>
-            <Link href="/login" className="nav-link">
-              Cambiar rol
             </Link>
             <button type="button" onClick={handleLogout} className="nav-link">
               Cerrar sesión
@@ -309,7 +312,7 @@ export default function AdminDashboardPage() {
           <div className="max-w-3xl">
             <div className="mb-5 section-pill">
               <span className="h-2 w-2 rounded-full bg-sky-500" />
-              Admin · inteligencia comercial
+              RAW · control ejecutivo
             </div>
 
             <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
@@ -326,9 +329,7 @@ export default function AdminDashboardPage() {
 
             <div className="mt-6 rounded-[20px] border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-700">
               Sesión activa como admin:{" "}
-              <span className="font-semibold">
-                {session.company || "RAW Admin"}
-              </span>
+              <span className="font-semibold">RAW Admin</span>
             </div>
           </div>
         </div>
@@ -547,13 +548,6 @@ export default function AdminDashboardPage() {
               className="inline-flex items-center justify-center rounded-2xl bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
             >
               Ver órdenes admin
-            </Link>
-
-            <Link
-              href="/upload"
-              className="inline-flex items-center justify-center rounded-2xl border border-sky-200 bg-white px-6 py-3 text-sm font-semibold text-sky-700 transition hover:bg-sky-50"
-            >
-              Ir a portal vendedor
             </Link>
           </div>
         </div>

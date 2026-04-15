@@ -1,43 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   clearDemoSession,
   getDemoSession,
   setDemoSession,
-  type DemoRole,
 } from "@/src/lib/demoAuth";
 
-export default function LoginPage() {
-  const router = useRouter();
-  const [currentRole, setCurrentRole] = useState<string>("");
+type DemoRole = "buyer" | "seller" | "admin";
 
-  useEffect(() => {
-    const session = getDemoSession();
-    setCurrentRole(session?.role || "");
-  }, []);
+export default function LoginPage() {
+  const session = useMemo(() => getDemoSession(), []);
 
   const handleLogin = (role: DemoRole) => {
     setDemoSession(role);
 
     if (role === "buyer") {
-      router.push("/client/materials");
+      window.location.href = "/client/materials";
       return;
     }
 
     if (role === "seller") {
-      router.push("/upload");
+      window.location.href = "/upload";
       return;
     }
 
-    router.push("/admin/orders");
+    window.location.href = "/admin";
   };
 
   const handleLogout = () => {
     clearDemoSession();
-    setCurrentRole("");
+    window.location.reload();
   };
 
   return (
@@ -52,104 +46,95 @@ export default function LoginPage() {
             </div>
           </Link>
 
-          <Link href="/" className="nav-link">
-            Volver
-          </Link>
+          {session ? (
+            <button type="button" onClick={handleLogout} className="nav-link">
+              Cerrar sesión demo
+            </button>
+          ) : null}
         </div>
       </header>
 
-      <section className="site-container py-16 lg:py-24">
-        <div className="mx-auto max-w-4xl">
-          <div className="mb-10 max-w-2xl">
+      <section className="relative overflow-hidden border-b border-neutral-100">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.14),transparent_26%),radial-gradient(circle_at_top_right,rgba(186,230,253,0.28),transparent_24%),linear-gradient(to_bottom,#ffffff,#f8fafc)]" />
+        <div className="site-container py-14 lg:py-20">
+          <div className="max-w-3xl">
             <div className="mb-5 section-pill">
               <span className="h-2 w-2 rounded-full bg-sky-500" />
-              Demo multirol
+              Demo multirrol
             </div>
 
             <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
-              COMPRAR ACERO NUNCA FUE TAN FACIL
+              Entra como comprador,
+              <span className="block text-neutral-400">
+                vendedor o admin.
+              </span>
             </h1>
 
-            <p className="mt-5 text-base leading-7 text-neutral-600">
-            COMPRA, VENDE Y CONTROLA TUS INVENTARIOS FACIL Y RÁPIDO DESDE UNA SOLA PLATAFORMA.
+            <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-600 md:text-lg">
+              Este acceso demo permite probar la plataforma por rol sin backend
+              real. La sesión se guarda localmente para navegar el flujo.
             </p>
-          </div>
 
-          {currentRole ? (
-            <div className="mb-8 rounded-[24px] border border-sky-200 bg-sky-50 p-5">
-              <p className="text-sm text-neutral-600">
-                Sesión activa:
-                <span className="ml-2 font-semibold text-neutral-950">
-                  {currentRole}
-                </span>
-              </p>
-              <button
-                onClick={handleLogout}
-                className="mt-4 inline-flex items-center justify-center rounded-2xl border border-neutral-200 bg-white px-5 py-3 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-50"
-              >
-                Cerrar sesión demo
-              </button>
+            {session ? (
+              <div className="mt-6 rounded-[20px] border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-700">
+                Sesión activa: <span className="font-semibold">{String(session)}</span>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </section>
+
+      <section className="site-container py-10 lg:py-14">
+        <div className="grid gap-6 md:grid-cols-3">
+          <button
+            type="button"
+            onClick={() => handleLogin("buyer")}
+            className="glass-card p-8 text-left transition hover:-translate-y-0.5 hover:shadow-[0_16px_50px_rgba(0,0,0,0.06)]"
+          >
+            <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-950 text-sm font-semibold text-white">
+              C
             </div>
-          ) : null}
+            <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+              Comprador demo
+            </h2>
+            <p className="mt-3 text-base leading-7 text-neutral-600">
+              Explora materiales, agrega al carrito, genera órdenes y revisa tus
+              estatus.
+            </p>
+          </button>
 
-          <div className="grid gap-6 md:grid-cols-3">
-            <article className="glass-card p-8">
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-950 text-sm font-bold text-white">
-                C
-              </div>
-              <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
-                Comprador demo
-              </h2>
-              <p className="mt-3 text-base leading-7 text-neutral-600">
-                Explora materiales, agrega al carrito, genera órdenes y revisa
-                tus estatus.
-              </p>
-              <button
-                onClick={() => handleLogin("buyer")}
-                className="mt-8 inline-flex w-full items-center justify-center rounded-2xl bg-neutral-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
-              >
-                Entrar como comprador
-              </button>
-            </article>
+          <button
+            type="button"
+            onClick={() => handleLogin("seller")}
+            className="glass-card p-8 text-left transition hover:-translate-y-0.5 hover:shadow-[0_16px_50px_rgba(0,0,0,0.06)]"
+          >
+            <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500 text-sm font-semibold text-white">
+              V
+            </div>
+            <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+              Vendedor demo
+            </h2>
+            <p className="mt-3 text-base leading-7 text-neutral-600">
+              Sube inventario, descarga plantilla y atiende órdenes pendientes.
+            </p>
+          </button>
 
-            <article className="glass-card p-8">
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-600 text-sm font-bold text-white">
-                V
-              </div>
-              <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
-                Vendedor demo
-              </h2>
-              <p className="mt-3 text-base leading-7 text-neutral-600">
-                Sube inventario, descarga la plantilla y atiende órdenes
-                pendientes.
-              </p>
-              <button
-                onClick={() => handleLogin("seller")}
-                className="mt-8 inline-flex w-full items-center justify-center rounded-2xl border border-sky-200 bg-white px-5 py-3 text-sm font-semibold text-sky-700 transition hover:bg-sky-50"
-              >
-                Entrar como vendedor
-              </button>
-            </article>
-
-            <article className="glass-card p-8">
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-200 text-sm font-bold text-neutral-900">
-                A
-              </div>
-              <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
-                Admin demo
-              </h2>
-              <p className="mt-3 text-base leading-7 text-neutral-600">
-                Supervisa órdenes, revisa expiraciones y ejecuta override desde
-                RAW.
-              </p>
-              <button
-                onClick={() => handleLogin("admin")}
-                className="mt-8 inline-flex w-full items-center justify-center rounded-2xl border border-neutral-200 bg-white px-5 py-3 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-50"
-              >
-                Entrar como admin
-              </button>
-            </article>
-          </div>
+          <button
+            type="button"
+            onClick={() => handleLogin("admin")}
+            className="glass-card p-8 text-left transition hover:-translate-y-0.5 hover:shadow-[0_16px_50px_rgba(0,0,0,0.06)]"
+          >
+            <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-200 text-sm font-semibold text-neutral-950">
+              A
+            </div>
+            <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+              Admin demo
+            </h2>
+            <p className="mt-3 text-base leading-7 text-neutral-600">
+              Supervisa métricas, revisa órdenes y controla el desempeño de la
+              operación.
+            </p>
+          </button>
         </div>
       </section>
     </main>
