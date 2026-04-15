@@ -295,8 +295,7 @@ export default function UploadPage() {
             </h1>
 
             <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-600 md:text-lg">
-              Diseñado para revisarse cómodamente desde iPad, con métricas claras,
-              poco ruido visual y foco en operación real.
+              Toneladas en inventario, Dias promedio en inventario, Ventas en USD, KPI, y todo lo que necesitas, para que puedas tomar decisiones rápidas y acertadas. Sin necesidad de reportes ni exportaciones.
             </p>
 
             {session?.role === "seller" ? (
