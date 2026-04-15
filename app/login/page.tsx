@@ -67,12 +67,11 @@ export default function LoginPage() {
             </div>
 
             <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
-              Entra como comprador, vendedor o admin.
+              COMPRAR ACERO NUNCA FUE TAN FACIL
             </h1>
 
             <p className="mt-5 text-base leading-7 text-neutral-600">
-              Este acceso demo permite probar la plataforma por rol sin backend
-              real. La sesión se guarda localmente para navegar el flujo.
+            COMPRA, VENDE Y CONTROLA TUS INVENTARIOS FACIL Y RÁPIDO DESDE UNA SOLA PLATAFORMA.
             </p>
           </div>
 

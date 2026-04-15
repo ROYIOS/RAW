@@ -1,26 +1,74 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff;
+    --foreground: #0a0a0a;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .page-shell {
+    @apply min-h-screen bg-white text-neutral-950;
+  }
+
+  .site-header {
+    @apply sticky top-0 z-50 border-b border-neutral-200/80 bg-white/90 backdrop-blur-md;
+  }
+
+  .site-container {
+    @apply mx-auto max-w-7xl px-6 lg:px-10;
+  }
+
+  .logo-badge {
+    @apply flex h-11 w-11 items-center justify-center rounded-2xl border border-sky-200 bg-sky-50 text-sm font-semibold tracking-[0.2em] text-sky-700 shadow-sm;
+  }
+
+  .nav-link {
+    @apply text-sm font-medium text-neutral-600 transition hover:text-neutral-950;
+  }
+
+  .nav-link-active {
+    @apply text-sm font-semibold text-neutral-950;
+  }
+
+  .cart-pill {
+    @apply relative inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700;
+  }
+
+  .section-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white/80 px-4 py-2 text-sm font-medium text-sky-700 shadow-sm backdrop-blur;
+  }
+
+  .glass-card {
+    @apply rounded-[32px] border border-neutral-200 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)];
+  }
+
+  .soft-hover {
+    @apply transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(56,189,248,0.12)];
+  }
 }
